@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:elevation="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/textView_adapter_display_contact_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/manager"
+            android:drawablePadding="7dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Name"/>
+        <TextView
+            android:layout_below="@id/textView_adapter_display_contact_Name"
+            android:id="@+id/textView_adapter_display_contact_Phone"
+            android:drawableLeft="@drawable/call_answer"
+            android:drawablePadding="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Phone Number"/>
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

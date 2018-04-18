@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_addBook"
+            android:icon="@drawable/ic_mode_edit_black_24dp"
+            android:title="DayBook" />
+        <item
+            android:id="@+id/nav_addPerson"
+            android:icon="@drawable/ic_person_pin_black_24dp"
+            android:title="Contacts" />
+        <item
+            android:id="@+id/nav_addPerson1"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="Add Contact" />
+        <item
+            android:id="@+id/nav_addDept"
+            android:icon="@drawable/profile"
+            android:title="Departments" />
+
+    </group>
+    <item android:title="User Profile">
+        <menu>
+            <item
+                android:id="@+id/nav_Logout"
+                android:icon="@drawable/ic_settings_power_black_24dp"
+                android:title="Logout" />
+
+        </menu>
+    </item>
+
+
+</menu>
