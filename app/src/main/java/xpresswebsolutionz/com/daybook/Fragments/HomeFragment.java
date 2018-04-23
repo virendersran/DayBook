@@ -1,13 +1,14 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Fragments;
 
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,10 +35,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import xpresswebsolutionz.com.daybook.Bean.BeanDepartment;
+import xpresswebsolutionz.com.daybook.Bean.BeanPerson;
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
+import xpresswebsolutionz.com.daybook.Utils.VolleySingleton;
 
 
 /**
@@ -58,8 +67,14 @@ public class HomeFragment extends Fragment {
 
     RequestQueue requestQueue;
     ArrayList<String> contactsList;
+    ArrayList<BeanPerson> contactIDList;
+    ArrayList<BeanDepartment> deptIDList;
     SharedPreferences sharedPreferences;
     ProgressDialog pd;
+
+    Calendar myCalendar;
+
+    int contactID,deptID,payID,catID,freID,statusID;
 
 
     public HomeFragment() {
@@ -73,6 +88,7 @@ public class HomeFragment extends Fragment {
        View view = inflater.inflate(R.layout.fragment_add, container, false);
        date = DateFormat.getDateInstance().format(new Date());
        dateTime=DateFormat.getDateTimeInstance().format(new Date());
+        myCalendar = Calendar.getInstance();
 
        textView_Date = view.findViewById(R.id.text_date);
        editText_Amount = view.findViewById(R.id.editTextamount);
@@ -104,66 +120,201 @@ public class HomeFragment extends Fragment {
            @Override
            public void onClick(View v) {
 
+
                addAmount = editText_Amount.getText().toString().trim();
                addPurpose = editText_Purpose.getText().toString().trim();
 
+               if (isValid()) {
 
-               Log.d("Name",addName);
-               Log.d("Dept",addDept);
-               Log.d("Amount",addAmount);
-               Log.d("Purpose",addPurpose);
-               Log.d("Pay",addPayment);
-               Log.d("cat",addcategory);
-               Log.d("Freq",addFrequency);
-               Log.d("Status",addStatus);
+                   Log.d("cID", String.valueOf(contactID));
+                   Log.d("Dept", String.valueOf(deptID));
+                   Log.d("Amount", addAmount);
+                   Log.d("Purpose", addPurpose);
+                   Log.d("Pay", String.valueOf(payID));
+                   Log.d("cat", String.valueOf(catID));
+                   Log.d("Freq", String.valueOf(freID));
+                   Log.d("Status", String.valueOf(statusID));
 
-               addDayBook();
+                   addDayBook();
+               }
+
+
+
 
 
            }
        });
 
 
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+        };
+
+        textView_Date.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+
+
+
+
        return view;
+    }
+
+    private void updateLabel() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        textView_Date.setText(dateFormat(sdf.format(myCalendar.getTime())));
+//        dateFormat(sdf.format(myCalendar.getTime()));
+    }
+
+    public String dateFormat(String date) {
+
+        String date1 = "";
+
+        String s[] = date.split("-");
+
+        int year = Integer.parseInt(s[0]);
+        int month = Integer.parseInt(s[1]);
+        String s1 = s[2];
+        Log.e("time",String.valueOf(year)+" "+String.valueOf(month)+" "+s1);
+//        String[] s2 = s1.split("T");
+//        int day = Integer.parseInt(s2[0]);
+//
+        switch (month) {
+            case 1:
+                date1 = "Jan " +s1+","+year;
+                break;
+            case 2:
+                date1 = "Feb " +s1+","+year;
+                break;
+            case 3:
+                date1 = "Mar " +s1+","+year;
+                break;
+            case 4:
+                date1 = "Apr " +s1+","+year;
+                break;
+            case 5:
+                date1 = "May " +s1+","+year;
+                break;
+            case 6:
+                date1 = "June " +s1+","+year;
+                break;
+            case 7:
+                date1 = "July " +s1+","+year;
+                break;
+            case 8:
+                date1 = "Aug " +s1+","+year;
+                break;
+            case 9:
+                date1 = "Sep " +s1+","+year;
+                break;
+            case 10:
+                date1 = "Oct " +s1+","+year;
+                break;
+            case 11:
+                date1 = "Nov " +s1+","+year;
+                break;
+            case 12:
+                date1 = "Dec " +s1+","+year;
+                break;
+
+            default:date1 = "";
+                break;
+        }
+
+
+        return date1;
+    }
+
+    public boolean isValid(){
+        boolean isChecked = true;
+
+        if (editText_Amount.getText().toString().trim().isEmpty()){
+            isChecked = false;
+            editText_Amount.setError("Please Enter Amount");
+        }
+        if (editText_Purpose.getText().toString().trim().isEmpty()){
+            isChecked = false;
+            editText_Purpose.setError("Please Enter Any Purpose");
+        }
+        if (contactID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Name", Toast.LENGTH_SHORT).show();
+
+        }
+        if (deptID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Department", Toast.LENGTH_SHORT).show();
+
+        }
+        if (payID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Payment Type", Toast.LENGTH_SHORT).show();
+
+        }
+        if (catID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Payment category", Toast.LENGTH_SHORT).show();
+
+        }
+        if (freID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Frequency", Toast.LENGTH_SHORT).show();
+
+        }
+        if (statusID == 0){
+            isChecked = false;
+            Toast.makeText(getActivity(), "Please Select Status", Toast.LENGTH_SHORT).show();
+
+        }
+
+        return isChecked;
     }
 
     void initLists(){
 
-        namesList = new ArrayList<>();
-//        deptList = new ArrayList<>();
         payList = new ArrayList<>();
         catgrylist = new ArrayList<>();
         freqList = new ArrayList<>();
         statusList = new ArrayList<>();
 
-        namesList.add("Select Name");
-        namesList.add("Parteek");
-        namesList.add("Virender");
-
-//        deptList.add("Select Department");
-//        deptList.add("Accounts");
-//        deptList.add("Ecommerce");
-//        deptList.add("Sceience");
-
         payList.add("Payment Type");
-        payList.add("Recieve");
         payList.add("Pay");
-        payList.add("Loan Recieve");
-        payList.add("Loan pay");
+        payList.add("Receive");
+        payList.add("Loan Pay");
+        payList.add("Loan Receive");
+
 
         catgrylist.add("Select Category");
         catgrylist.add("Refundable");
         catgrylist.add("Non Refundable");
 
         freqList.add("Select Frequency");
-        freqList.add("Daliy");
-        freqList.add("Weekly");
+        freqList.add("Routine");
         freqList.add("Monthly");
+        freqList.add("Once in a while");
         freqList.add("Yearly");
 
         statusList.add("Select Status");
-        statusList.add("officially");
-        statusList.add("unofficially");
+        statusList.add("Officially");
+        statusList.add("Unofficially");
 
         sAdapterName = new ArrayAdapter<>(getActivity(),R.layout.spinner_item,contactsList);
         sAdapterDept = new ArrayAdapter<>(getActivity(),R.layout.spinner_item,deptList);
@@ -186,6 +337,12 @@ public class HomeFragment extends Fragment {
                 if (position != 0 ){
 
                     addName = contactsList.get(position);
+                    for (int k=0;k<contactIDList.size();k++){
+                        BeanPerson beanPerson=contactIDList.get(k);
+                        if (addName.equals(beanPerson.getName())){
+                            contactID=beanPerson.getPersonID();
+                        }
+                    }
                 }
 
 
@@ -205,6 +362,14 @@ public class HomeFragment extends Fragment {
 
                 if (position != 0 ) {
                     addDept = deptList.get(position);
+
+                    for (int k=0;k<deptIDList.size();k++){
+                        BeanDepartment department = deptIDList.get(k);
+                        if (addDept.equals(department.getDeptName())){
+                            deptID = department.getId();
+                        }
+                    }
+                   // Toast.makeText(getActivity(), String.valueOf(deptID), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -221,7 +386,11 @@ public class HomeFragment extends Fragment {
 
                 if (position != 0 ) {
                     addPayment = payList.get(position);
+                    payID = position;
+                    Log.e("payID",String.valueOf(payID));
+
                 }
+
             }
 
             @Override
@@ -236,6 +405,9 @@ public class HomeFragment extends Fragment {
 
                 if (position != 0 ) {
                     addcategory = catgrylist.get(position);
+                    catID = position;
+                    Log.e("CatId",String.valueOf(catID));
+
                 }
             }
 
@@ -252,6 +424,9 @@ public class HomeFragment extends Fragment {
 
                 if (position != 0 ) {
                     addFrequency = freqList.get(position);
+                    freID = position;
+                    Log.e("FreID",String.valueOf(freID));
+
                 }
             }
 
@@ -266,6 +441,9 @@ public class HomeFragment extends Fragment {
 
                 if (position != 0 ) {
                     addStatus = statusList.get(position);
+                    statusID = position;
+                   Log.e("statusID",String.valueOf(statusID));
+
                 }
 
             }
@@ -284,7 +462,9 @@ public class HomeFragment extends Fragment {
         contactsList = new ArrayList<>();
         contactsList.add("Select Name");
 
-        StringRequest request=new StringRequest(Request.Method.GET, Util.getContactUrl, new Response.Listener<String>() {
+        contactIDList = new ArrayList<>();
+
+        StringRequest request=new StringRequest(Request.Method.POST, Util.getContactUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -297,6 +477,7 @@ public class HomeFragment extends Fragment {
                             JSONObject object1=array.getJSONObject(i);
 
                             contactsList.add(object1.getString("Name"));
+                            contactIDList.add(new BeanPerson(object1.getInt("Id"),object1.getString("Name")));
 
                         }
 
@@ -321,7 +502,18 @@ public class HomeFragment extends Fragment {
                 Log.e("Error",error.toString());
 
             }
-        });
+        })
+        {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID, 0)));
+                return map;
+            }
+
+        };
         requestQueue.add(request);
 
     }
@@ -329,6 +521,7 @@ public class HomeFragment extends Fragment {
     void getDepartList(){
         deptList = new ArrayList<>();
         deptList.add("Select Department");
+        deptIDList = new ArrayList<>();
 
         StringRequest request = new StringRequest(Request.Method.POST, Util.getDeptUrl, new Response.Listener<String>() {
             @Override
@@ -343,11 +536,14 @@ public class HomeFragment extends Fragment {
                     if (message.contains("Records Retrieved sucessfully")){
                         for (int i=0;i<array.length();i++){
                             JSONObject object1=array.getJSONObject(i);
+                            int id = object1.getInt("Id");
                             String name=object1.getString("Name");
                             deptList.add(name);
+                            deptIDList.add(new BeanDepartment(id,name));
                         }
 
                         Log.e("size", String.valueOf(array.length()));
+
 
                     }else {
 
@@ -368,7 +564,18 @@ public class HomeFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        })
+        {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID, 0)));
+                return map;
+            }
+
+        };
 
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);
 
@@ -424,7 +631,8 @@ public class HomeFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map=new HashMap<>();
-                map.put("Date",date);
+                Log.e("Date",textView_Date.getText().toString());
+                map.put("Date",textView_Date.getText().toString());
                 map.put("PersonName",addName);
                 map.put("DeptName",addDept);
                 map.put("Amount",addAmount);
@@ -433,7 +641,7 @@ public class HomeFragment extends Fragment {
                 map.put("Category",addcategory);
                 map.put("Frequancy",addFrequency);
                 map.put("Status",addStatus);
-                map.put("UserId", String.valueOf(sharedPreferences.getInt("userID",0)));
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID,0)));
                 map.put("CreatedDate",dateTime);
                 return map;
             }

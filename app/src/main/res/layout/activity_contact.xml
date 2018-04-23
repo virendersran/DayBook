@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    tools:context=".Fragments.DisplayContactsFragment">
+    tools:context=".Activities.ContactActivity">
 
     <ListView
-        android:id="@+id/listView_DisplayContact"
+        android:id="@+id/listView_DisplayContact_Act"
         android:layout_width="match_parent"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:layout_height="match_parent"/>
 
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,7 +1,6 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,13 +20,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import xpresswebsolutionz.com.daybook.Bean.BeanDepartment;
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
 
 public class DepartmentAdapter extends ArrayAdapter<BeanDepartment> {
     Context context;

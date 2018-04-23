@@ -1,4 +1,4 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Bean;
 
 public class BeanPerson {
 
@@ -10,6 +10,11 @@ public class BeanPerson {
     }
 
     public BeanPerson(String name) {
+        this.name = name;
+    }
+
+    public BeanPerson(int personID, String name) {
+        this.personID = personID;
         this.name = name;
     }
 

@@ -1,4 +1,4 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Fragments;
 
 
 import android.app.ProgressDialog;
@@ -20,6 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import xpresswebsolutionz.com.daybook.Adapters.AdapterDisplayContact;
+import xpresswebsolutionz.com.daybook.Bean.BeanPerson;
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
+import xpresswebsolutionz.com.daybook.Utils.VolleySingleton;
 
 
 /**
@@ -61,13 +67,14 @@ public class DisplayContactsFragment extends Fragment {
         contactsList = new ArrayList<>();
         pd.show();
 
-        StringRequest request=new StringRequest(Request.Method.GET, Util.getContactUrl, new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.POST, Util.getContactUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject object=new JSONObject(response);
                     JSONArray array=object.getJSONArray("persons");
                     String message=object.getString("message");
+                    Log.e("message",message);
 
                     if (message.contains("Records Retrieved sucessfully")){
                         for (int i=0;i<array.length();i++){
@@ -97,6 +104,7 @@ public class DisplayContactsFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    pd.dismiss();
 
                 }
             }

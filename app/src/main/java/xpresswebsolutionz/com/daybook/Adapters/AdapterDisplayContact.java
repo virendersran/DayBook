@@ -1,4 +1,4 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import xpresswebsolutionz.com.daybook.Bean.BeanPerson;
+import xpresswebsolutionz.com.daybook.R;
 
 public class AdapterDisplayContact extends ArrayAdapter<BeanPerson>{
     Context context;

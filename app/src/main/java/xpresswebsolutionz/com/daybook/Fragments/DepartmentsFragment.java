@@ -1,4 +1,4 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Fragments;
 
 
 import android.app.ProgressDialog;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -32,6 +30,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import xpresswebsolutionz.com.daybook.Adapters.DepartmentAdapter;
+import xpresswebsolutionz.com.daybook.Bean.BeanDepartment;
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
+import xpresswebsolutionz.com.daybook.Utils.VolleySingleton;
 
 
 /**
@@ -132,7 +136,7 @@ public class DepartmentsFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map=new HashMap<>();
                 map.put("Name",department_Name);
-                map.put("UserId", String.valueOf(sharedPreferences.getInt("userID",0)));
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID,0)));
                 return map;
             }
         };
@@ -183,7 +187,17 @@ public class DepartmentsFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID, 0)));
+                return map;
+            }
+
+        };
 
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);
 

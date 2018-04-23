@@ -1,14 +1,10 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,29 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import xpresswebsolutionz.com.daybook.Fragments.AddPersonsFragment;
+import xpresswebsolutionz.com.daybook.Fragments.DepartmentsFragment;
+import xpresswebsolutionz.com.daybook.Fragments.DisplayContactsFragment;
+import xpresswebsolutionz.com.daybook.Fragments.DisplayDayBookFragment;
+import xpresswebsolutionz.com.daybook.Fragments.HomeFragment;
+import xpresswebsolutionz.com.daybook.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager;
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
 
@@ -66,6 +53,7 @@ public class MainActivity extends AppCompatActivity
         setTitle("DayBook");
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = sharedPreferences.edit();
 
 
 
@@ -109,28 +97,41 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_addBook) {
-            setTitle("DayBook");
+            setTitle("Add DayBook");
             HomeFragment homeFragment = new HomeFragment();
             fragmentManager.beginTransaction().replace(R.id.frameLayout,homeFragment).commit();
-            // Handle the camera action
+
+        } else if (id == R.id.nav_dayBook) {
+            setTitle("DayBook");
+//            DisplayDayBookFragment dayBookFragment = new DisplayDayBookFragment();
+//            fragmentManager.beginTransaction().replace(R.id.frameLayout,dayBookFragment).commit();
+            startActivity(new Intent(MainActivity.this,DayBookActivity.class));
+            overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right);
+            return false;
         } else if (id == R.id.nav_addPerson) {
             setTitle("Contacts");
-            DisplayContactsFragment contactsFragment = new DisplayContactsFragment();
-            fragmentManager.beginTransaction().replace(R.id.frameLayout,contactsFragment).commit();
+//            DisplayContactsFragment contactsFragment = new DisplayContactsFragment();
+//            fragmentManager.beginTransaction().replace(R.id.frameLayout,contactsFragment).commit();
+            startActivity(new Intent(MainActivity.this,ContactActivity.class));
+            overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right);
+            return false;
 
         } else if (id == R.id.nav_addDept) {
             setTitle("Department");
             DepartmentsFragment departmentsFragment = new DepartmentsFragment();
             fragmentManager.beginTransaction().replace(R.id.frameLayout,departmentsFragment).commit();
 
-        }else if (id == R.id.nav_addPerson1) {
-            setTitle("Add Contact");
-            AddPersonsFragment personsFragment = new AddPersonsFragment();
-            fragmentManager.beginTransaction().replace(R.id.frameLayout,personsFragment).commit();
+//        }else if (id == R.id.nav_addPerson1) {
+//            setTitle("Add Contact");
+//            AddPersonsFragment personsFragment = new AddPersonsFragment();
+//            fragmentManager.beginTransaction().replace(R.id.frameLayout,personsFragment).commit();
 
         }
         else if (id == R.id.nav_Logout) {
 
+
+            editor.clear();
+            editor.commit();
             startActivity(new Intent(MainActivity.this,Login.class));
             finish();
 

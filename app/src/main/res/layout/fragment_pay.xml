@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    tools:context=".Fragments.DisplayContactsFragment">
+    tools:context=".Fragments.PayFragment">
 
     <ListView
-        android:id="@+id/listView_DisplayContact"
+        android:id="@+id/listView_DayBookPay"
         android:layout_width="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:divider="@null">
 
+    </ListView>
 
 </FrameLayout>

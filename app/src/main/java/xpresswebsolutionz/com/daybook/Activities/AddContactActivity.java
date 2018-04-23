@@ -1,78 +1,66 @@
-package xpresswebsolutionz.com.daybook;
-
+package xpresswebsolutionz.com.daybook.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
+import xpresswebsolutionz.com.daybook.Utils.VolleySingleton;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class AddPersonsFragment extends Fragment {
+public class AddContactActivity extends AppCompatActivity {
+
 
     EditText editText_Name,editText_Phone,editText_Email,editText_Address1,editText_Address2,editText_Note;
     Button btn_Save;
     String personName,personPhone,personEmail,personAddress1,personAddress2,personNote;
 
-    RequestQueue requestQueue;
     ProgressDialog pd;
     SharedPreferences sharedPreferences;
 
 
-
-    public AddPersonsFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_persons, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_contact);
 
-        requestQueue = Volley.newRequestQueue(getActivity());
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        pd=new ProgressDialog(getActivity());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        pd=new ProgressDialog(this);
         pd.setCancelable(false);
         pd.setMessage("Adding Contact");
 
-        editText_Name = view.findViewById(R.id.editText_addContact_Name);
-        editText_Phone = view.findViewById(R.id.editText_addContact_Phone);
-        editText_Email = view.findViewById(R.id.editText_addContact_Email);
-        editText_Address1 = view.findViewById(R.id.editText_addContact_Address1);
-        editText_Address2 = view.findViewById(R.id.editText_addContact_Address2);
-        editText_Note = view.findViewById(R.id.editText_addContact_Note);
+        editText_Name = findViewById(R.id.editText_addContact_Name);
+        editText_Phone = findViewById(R.id.editText_addContact_Phone);
+        editText_Email = findViewById(R.id.editText_addContact_Email);
+        editText_Address1 = findViewById(R.id.editText_addContact_Address1);
+        editText_Address2 = findViewById(R.id.editText_addContact_Address2);
+        editText_Note = findViewById(R.id.editText_addContact_Note);
 
-        btn_Save = view.findViewById(R.id.button_addContact);
+        btn_Save = findViewById(R.id.button_addContact);
 
         btn_Save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +78,28 @@ public class AddPersonsFragment extends Fragment {
             }
         });
 
-        return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, ContactActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     void addContact(){
@@ -106,12 +115,14 @@ public class AddPersonsFragment extends Fragment {
                     if (message == 1){
 
                         pd.dismiss();
-                       Toast.makeText(getActivity(), "Contact Added SuccessFully", Toast.LENGTH_SHORT).show();
-                       clearFields();
+                        Toast.makeText(AddContactActivity.this, "Contact Added SuccessFully", Toast.LENGTH_SHORT).show();
+                        clearFields();
+
+
 
                     }else {
 
-                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddContactActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         pd.dismiss();
 
                     }
@@ -137,11 +148,11 @@ public class AddPersonsFragment extends Fragment {
                 map.put("PhoneNumber",personPhone);
                 map.put("Email",personEmail);
                 map.put("Notes",personNote);
-                map.put("UserId", String.valueOf(sharedPreferences.getInt("userID",0)));
+                map.put("UserId", String.valueOf(sharedPreferences.getInt(Util.Key_UserID,0)));
                 return map;
             }
         };
-        requestQueue.add(request);
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
 
     }
 

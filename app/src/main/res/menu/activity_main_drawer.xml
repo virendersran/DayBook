@@ -7,15 +7,19 @@
         <item
             android:id="@+id/nav_addBook"
             android:icon="@drawable/ic_mode_edit_black_24dp"
+            android:title="Add DayBook" />
+        <item
+            android:id="@+id/nav_dayBook"
+            android:icon="@drawable/dayreport"
             android:title="DayBook" />
         <item
             android:id="@+id/nav_addPerson"
             android:icon="@drawable/ic_person_pin_black_24dp"
             android:title="Contacts" />
-        <item
-            android:id="@+id/nav_addPerson1"
-            android:icon="@drawable/ic_person_add_black_24dp"
-            android:title="Add Contact" />
+        <!--<item-->
+            <!--android:id="@+id/nav_addPerson1"-->
+            <!--android:icon="@drawable/ic_person_add_black_24dp"-->
+            <!--android:title="Add Contact" />-->
         <item
             android:id="@+id/nav_addDept"
             android:icon="@drawable/profile"

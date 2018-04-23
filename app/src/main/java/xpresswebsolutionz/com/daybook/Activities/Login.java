@@ -1,4 +1,4 @@
-package xpresswebsolutionz.com.daybook;
+package xpresswebsolutionz.com.daybook.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -30,6 +29,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import xpresswebsolutionz.com.daybook.R;
+import xpresswebsolutionz.com.daybook.Utils.Util;
 
 
 public class Login extends AppCompatActivity {
@@ -119,8 +121,9 @@ public class Login extends AppCompatActivity {
                         for (int i=0;i<array.length();i++){
                             JSONObject object1=array.getJSONObject(i);
                             int id=object1.getInt("Id");
-                            editor.putInt("userID",id);
-                            editor.putString("username",object1.getString("UserName"));
+                            editor.putInt(Util.Key_UserID,id);
+                            editor.putString(Util.Key_UserName,object1.getString("UserName"));
+                            editor.putBoolean(Util.Key_LoginStatus,true);
                             editor.commit();
                         }
                         pd.dismiss();
